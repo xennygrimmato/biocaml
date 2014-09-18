@@ -13,6 +13,10 @@ module Stream : module type of CFStream_stream
 
 val ( |? ) : 'a option -> 'a -> 'a
 
+val check : bool -> string -> (unit, Core_kernel.Error.t) Result.t
+val checkf : bool -> ('a, unit, string, unit Or_error.t) format4 -> 'a
+
+
 module Array : sig
   include module type of Core.Std.Array
 

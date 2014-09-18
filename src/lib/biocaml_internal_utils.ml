@@ -7,6 +7,12 @@ module Stream = CFStream_stream
 
 let ( |? ) x default = Core.Option.value ~default x
 
+let check b msg =
+  if b then Ok ()
+  else Or_error.error_string msg
+
+let checkf b format = Printf.ksprintf (check b) format
+
 module Array = struct
   include Core.Std.Array
   let range xs = Stream.Infix.(0 --^ (length xs))

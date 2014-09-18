@@ -3,12 +3,6 @@ open Biocaml_internal_utils
 open CFStream
 open Or_error
 
-let check b msg =
-  if b then Ok ()
-  else error_string msg
-
-let checkf b format = Printf.ksprintf (check b) format
-
 let check_buf ~buf ~pos ~len =
   check (String.length buf >= pos + len) "Buffer too short"
 
