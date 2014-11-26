@@ -13,6 +13,31 @@ let check b msg =
 
 let checkf b format = Printf.ksprintf (check b) format
 
+let check_opt o msg = match o with
+  | None -> Or_error.error_string msg
+  | Some x -> Ok x
+
+let input_string ic n =
+  let buf = String.make n '\000' in
+  really_input ic buf 0 n ;
+  buf
+
+let input_u8 iz =
+  Char.to_int (input_char iz)
+
+let input_s32 ic =
+  let b1 = input_u8 ic in
+  let b2 = input_u8 ic in
+  let b3 = input_u8 ic in
+  let b4 = input_u8 ic in
+  Int32.bit_or
+    (Int32.of_int_exn b1)
+    (Int32.bit_or
+       (Int32.shift_left (Int32.of_int_exn b2) 8)
+       (Int32.bit_or
+          (Int32.shift_left (Int32.of_int_exn b3) 16)
+          (Int32.shift_left (Int32.of_int_exn b4) 24)))
+
 module Array = struct
   include Core.Std.Array
   let range xs = Stream.Infix.(0 --^ (length xs))
